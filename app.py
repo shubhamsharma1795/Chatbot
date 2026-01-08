@@ -5,7 +5,7 @@ st.title("👞 Inuit Luxury Footwear Chatbot")
 
 # ---------------- SESSION STATE ----------------
 if "step" not in st.session_state:
-    st.session_state.step = "welcome"
+    st.session_state.step = "category"
 
 if "category" not in st.session_state:
     st.session_state.category = None
@@ -13,7 +13,7 @@ if "category" not in st.session_state:
 if "style" not in st.session_state:
     st.session_state.style = None
 
-# ---------------- REAL YOUTUBE VIDEOS ----------------
+# ---------------- VIDEO LINKS ----------------
 VIDEOS = {
     ("Men Shoes", "Formal"): [
         "https://www.youtube.com/watch?v=JQH6E7G8KXw",
@@ -62,20 +62,20 @@ VIDEOS = {
     ],
 }
 
-# ---------------- CHAT FLOW ----------------
-if st.session_state.step == "welcome":
+# ---------------- STEP 1: CATEGORY ----------------
+if st.session_state.step == "category":
     st.markdown(
         """
         👋 **Welcome to Inuit Luxury Footwear!**
 
-        We create premium handcrafted shoes using high-quality leather.
+        We craft premium handcrafted shoes using high-quality leather.
 
-        **What would you like to explore?**
+        **Which category would you like to explore?**
         """
     )
 
     category = st.radio(
-        "Choose a category:",
+        "Select category:",
         ["Men Shoes", "Women Shoes", "Luxury Shoes"]
     )
 
@@ -84,22 +84,24 @@ if st.session_state.step == "welcome":
         st.session_state.step = "style"
         st.rerun()
 
+# ---------------- STEP 2: STYLE ----------------
 elif st.session_state.step == "style":
     st.markdown(
-        f"Great choice! You selected **{st.session_state.category}** 👌\n\n"
-        "Which style do you prefer?"
+        f"You selected **{st.session_state.category}** 👌\n\n"
+        "What style are you interested in?"
     )
 
     style = st.radio(
-        "Select style:",
+        "Choose style:",
         ["Formal", "Casual", "Party"]
     )
 
-    if st.button("Show Manufacturing Process"):
+    if st.button("Show How They’re Made"):
         st.session_state.style = style
         st.session_state.step = "videos"
         st.rerun()
 
+# ---------------- STEP 3: VIDEOS ----------------
 elif st.session_state.step == "videos":
     st.markdown(
         f"🛠️ **How Inuit {st.session_state.category} ({st.session_state.style}) Are Made**"
@@ -108,16 +110,33 @@ elif st.session_state.step == "videos":
     for video in VIDEOS[(st.session_state.category, st.session_state.style)]:
         st.video(video)
 
-    delivery = st.radio(
+    st.markdown("### What would you like to do next?")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        if st.button("🛒 Place Order"):
+            st.session_state.step = "order"
+            st.rerun()
+
+    with col2:
+        if st.button("🔁 Explore Another Category"):
+            st.session_state.step = "category"
+            st.rerun()
+
+# ---------------- STEP 4: ORDER ----------------
+elif st.session_state.step == "order":
+    choice = st.radio(
         "Would you like to place an order for home delivery?",
         ["Yes", "No"]
     )
 
     if st.button("Submit"):
-        st.session_state.delivery = delivery
+        st.session_state.delivery = choice
         st.session_state.step = "end"
         st.rerun()
 
+# ---------------- STEP 5: END ----------------
 elif st.session_state.step == "end":
     if st.session_state.delivery == "Yes":
         st.success(
@@ -128,9 +147,9 @@ elif st.session_state.step == "end":
     else:
         st.info(
             "No worries 😊\n\n"
-            "Feel free to explore our collection anytime."
+            "You can continue exploring our collection."
         )
 
-    if st.button("Start Over"):
-        st.session_state.clear()
+    if st.button("🔁 Explore More Shoes"):
+        st.session_state.step = "category"
         st.rerun()
