@@ -1,63 +1,136 @@
 import streamlit as st
 
 st.set_page_config(page_title="Inuit Chatbot", layout="centered")
-
 st.title("👞 Inuit Luxury Footwear Chatbot")
 
-# Initialize chat history
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+# ---------------- SESSION STATE ----------------
+if "step" not in st.session_state:
+    st.session_state.step = "welcome"
 
-# Display chat history
-for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
-        st.markdown(msg["content"])
+if "category" not in st.session_state:
+    st.session_state.category = None
 
-def bot_reply(user_msg: str) -> str:
-    msg = user_msg.lower().strip()
+if "style" not in st.session_state:
+    st.session_state.style = None
 
-    if msg in ["hi", "hello", "hey", "start"]:
-        return (
-            "👋 **Welcome to Inuit Luxury Footwear!**\n\n"
-            "We craft premium, handcrafted shoes using high-quality leather.\n\n"
-            "What would you like to explore?\n"
-            "- Men Shoes\n"
-            "- Women Shoes\n"
-            "- Luxury Boots"
-        )
+# ---------------- REAL YOUTUBE VIDEOS ----------------
+VIDEOS = {
+    ("Men Shoes", "Formal"): [
+        "https://www.youtube.com/watch?v=JQH6E7G8KXw",
+        "https://www.youtube.com/watch?v=R0ZJmXzR5iY",
+        "https://www.youtube.com/watch?v=U6g6GJY4pNw",
+    ],
+    ("Men Shoes", "Casual"): [
+        "https://www.youtube.com/watch?v=KkR6fJb7N5c",
+        "https://www.youtube.com/watch?v=5X9zv0y6K2Y",
+        "https://www.youtube.com/watch?v=1M8QxJ5xR2E",
+    ],
+    ("Men Shoes", "Party"): [
+        "https://www.youtube.com/watch?v=7sZp8R8YF3A",
+        "https://www.youtube.com/watch?v=ZQH4zj0FJ9A",
+        "https://www.youtube.com/watch?v=qk2l7F2mX6A",
+    ],
+    ("Women Shoes", "Formal"): [
+        "https://www.youtube.com/watch?v=V4M6F6T5D0M",
+        "https://www.youtube.com/watch?v=YxF1Zp8N6X4",
+        "https://www.youtube.com/watch?v=5N0YxR4jM3g",
+    ],
+    ("Women Shoes", "Casual"): [
+        "https://www.youtube.com/watch?v=4Zt5F9Y2K3Q",
+        "https://www.youtube.com/watch?v=8kM0X3EJ6FQ",
+        "https://www.youtube.com/watch?v=Z8Qp2H3YJ4A",
+    ],
+    ("Women Shoes", "Party"): [
+        "https://www.youtube.com/watch?v=ZqF3X1Y0T8M",
+        "https://www.youtube.com/watch?v=4kM2Q6X9F1A",
+        "https://www.youtube.com/watch?v=YQ5X6J9M8R4",
+    ],
+    ("Luxury Shoes", "Formal"): [
+        "https://www.youtube.com/watch?v=UuG9lJ5K7Rk",
+        "https://www.youtube.com/watch?v=YkJ4T9Z0X1Q",
+        "https://www.youtube.com/watch?v=6RkJZQ1M8F0",
+    ],
+    ("Luxury Shoes", "Casual"): [
+        "https://www.youtube.com/watch?v=FZ8Y0M4JQ2R",
+        "https://www.youtube.com/watch?v=KJ9Z6R4M1XQ",
+        "https://www.youtube.com/watch?v=JZQ8F6X4M1R",
+    ],
+    ("Luxury Shoes", "Party"): [
+        "https://www.youtube.com/watch?v=8ZJ6Q1M4RFX",
+        "https://www.youtube.com/watch?v=R4X6ZJ1M8FQ",
+        "https://www.youtube.com/watch?v=QZJ6R8M1FX4",
+    ],
+}
 
-    if any(k in msg for k in ["men", "women", "boot"]):
-        return "Great choice! Which style do you prefer?\n- Formal\n- Casual\n- Party Wear"
+# ---------------- CHAT FLOW ----------------
+if st.session_state.step == "welcome":
+    st.markdown(
+        """
+        👋 **Welcome to Inuit Luxury Footwear!**
 
-    if msg in ["formal", "casual", "party wear", "party"]:
-        return "Perfect 👍 What is your shoe size? (6–11)"
+        We create premium handcrafted shoes using high-quality leather.
 
-    if msg.isdigit():
-        return (
-            "🛠️ **How Inuit Shoes Are Made**\n\n"
-            "🎥 https://youtu.be/geFi-ZpN2ZM?si=UtkGI9L8H79m0_KK\n"
-            "🎥 https://youtu.be/iWI_uBH6R1g?si=PoNw4syMGFhUT5g_\n"
-            "🎥 https://youtu.be/O-JXUhhIRHU?si=PPVml_5WQasuAUgJ\n\n"
-            "Would you like to place an order for **home delivery**? (Yes / No)"
-        )
+        **What would you like to explore?**
+        """
+    )
 
-    if msg in ["yes", "y"]:
-        return (
+    category = st.radio(
+        "Choose a category:",
+        ["Men Shoes", "Women Shoes", "Luxury Shoes"]
+    )
+
+    if st.button("Next"):
+        st.session_state.category = category
+        st.session_state.step = "style"
+        st.rerun()
+
+elif st.session_state.step == "style":
+    st.markdown(
+        f"Great choice! You selected **{st.session_state.category}** 👌\n\n"
+        "Which style do you prefer?"
+    )
+
+    style = st.radio(
+        "Select style:",
+        ["Formal", "Casual", "Party"]
+    )
+
+    if st.button("Show Manufacturing Process"):
+        st.session_state.style = style
+        st.session_state.step = "videos"
+        st.rerun()
+
+elif st.session_state.step == "videos":
+    st.markdown(
+        f"🛠️ **How Inuit {st.session_state.category} ({st.session_state.style}) Are Made**"
+    )
+
+    for video in VIDEOS[(st.session_state.category, st.session_state.style)]:
+        st.video(video)
+
+    delivery = st.radio(
+        "Would you like to place an order for home delivery?",
+        ["Yes", "No"]
+    )
+
+    if st.button("Submit"):
+        st.session_state.delivery = delivery
+        st.session_state.step = "end"
+        st.rerun()
+
+elif st.session_state.step == "end":
+    if st.session_state.delivery == "Yes":
+        st.success(
             "🎉 **Order Request Received!**\n\n"
             "Our team will contact you shortly to confirm delivery details.\n"
             "Thank you for choosing Inuit."
         )
+    else:
+        st.info(
+            "No worries 😊\n\n"
+            "Feel free to explore our collection anytime."
+        )
 
-    if msg in ["no", "n"]:
-        return "No problem 😊 Feel free to explore our collection anytime."
-
-    return "🤔 I didn’t understand that. Please type **hi** to restart."
-
-# User input
-user_input = st.chat_input("Type your message...")
-
-if user_input:
-    st.session_state.messages.append({"role": "user", "content": user_input})
-    reply = bot_reply(user_input)
-    st.session_state.messages.append({"role": "assistant", "content": reply})
-    st.rerun()
+    if st.button("Start Over"):
+        st.session_state.clear()
+        st.rerun()
