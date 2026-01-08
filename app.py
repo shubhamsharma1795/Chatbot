@@ -16,14 +16,14 @@ if "style" not in st.session_state:
 # ---------------- VIDEO LINKS ----------------
 VIDEOS = {
     ("Men Shoes", "Formal"): [
-        "https://www.youtube.com/watch?v=JQH6E7G8KXw",
-        "https://www.youtube.com/watch?v=R0ZJmXzR5iY",
+        "https://youtu.be/uKN9h4OJFHM?si=vdQkYbmwdiv1RDZE",
+        "https://youtu.be/r7f1Qp734eQ?si=uNu7z7D2cP3qZw91",
         "https://www.youtube.com/watch?v=U6g6GJY4pNw",
     ],
     ("Men Shoes", "Casual"): [
-        "https://www.youtube.com/watch?v=KkR6fJb7N5c",
-        "https://www.youtube.com/watch?v=5X9zv0y6K2Y",
-        "https://www.youtube.com/watch?v=1M8QxJ5xR2E",
+        "https://youtube.com/shorts/Clh3nTdUgj4?si=lm51pvXIZjHTKSKk",
+        "https://youtu.be/1wYr02jZStc?si=R53ii6AFFQt5Yk4k",
+        "https://youtu.be/D3vyRNCZY-Y?si=y4VesQAf03A783qv",
     ],
     ("Men Shoes", "Party"): [
         "https://www.youtube.com/watch?v=7sZp8R8YF3A",
