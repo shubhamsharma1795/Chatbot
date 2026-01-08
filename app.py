@@ -35,9 +35,9 @@ def bot_reply(user_msg: str) -> str:
     if msg.isdigit():
         return (
             "🛠️ **How Inuit Shoes Are Made**\n\n"
-            "🎥 https://www.youtube.com/watch?v=VIDEO1\n"
-            "🎥 https://www.youtube.com/watch?v=VIDEO2\n"
-            "🎥 https://www.youtube.com/watch?v=VIDEO3\n\n"
+            "🎥 https://youtu.be/geFi-ZpN2ZM?si=UtkGI9L8H79m0_KK\n"
+            "🎥 https://youtu.be/iWI_uBH6R1g?si=PoNw4syMGFhUT5g_\n"
+            "🎥 https://youtu.be/O-JXUhhIRHU?si=PPVml_5WQasuAUgJ\n\n"
             "Would you like to place an order for **home delivery**? (Yes / No)"
         )
 
