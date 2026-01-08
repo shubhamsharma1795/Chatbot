@@ -13,17 +13,20 @@ if "category" not in st.session_state:
 if "style" not in st.session_state:
     st.session_state.style = None
 
+if "size" not in st.session_state:
+    st.session_state.size = None
+
 # ---------------- VIDEO LINKS ----------------
 VIDEOS = {
     ("Men Shoes", "Formal"): [
-        "https://youtu.be/uKN9h4OJFHM?si=vdQkYbmwdiv1RDZE",
-        "https://youtu.be/r7f1Qp734eQ?si=uNu7z7D2cP3qZw91",
+        "https://youtu.be/uKN9h4OJFHM",
+        "https://youtu.be/r7f1Qp734eQ",
         "https://www.youtube.com/watch?v=U6g6GJY4pNw",
     ],
     ("Men Shoes", "Casual"): [
-        "https://youtube.com/shorts/Clh3nTdUgj4?si=lm51pvXIZjHTKSKk",
-        "https://youtu.be/1wYr02jZStc?si=R53ii6AFFQt5Yk4k",
-        "https://youtu.be/D3vyRNCZY-Y?si=y4VesQAf03A783qv",
+        "https://youtube.com/shorts/Clh3nTdUgj4",
+        "https://youtu.be/1wYr02jZStc",
+        "https://youtu.be/D3vyRNCZY-Y",
     ],
     ("Men Shoes", "Party"): [
         "https://www.youtube.com/watch?v=7sZp8R8YF3A",
@@ -96,12 +99,29 @@ elif st.session_state.step == "style":
         ["Formal", "Casual", "Party"]
     )
 
-    if st.button("Show How They’re Made"):
+    if st.button("Next"):
         st.session_state.style = style
+        st.session_state.step = "size"
+        st.rerun()
+
+# ---------------- STEP 3: SHOE SIZE ----------------
+elif st.session_state.step == "size":
+    st.markdown(
+        f"Great choice! **{st.session_state.category} – {st.session_state.style}**\n\n"
+        "Please select your shoe size:"
+    )
+
+    size = st.selectbox(
+        "Shoe Size:",
+        ["6", "7", "8", "9", "10", "11"]
+    )
+
+    if st.button("Show How They’re Made"):
+        st.session_state.size = size
         st.session_state.step = "videos"
         st.rerun()
 
-# ---------------- STEP 3: VIDEOS ----------------
+# ---------------- STEP 4: VIDEOS ----------------
 elif st.session_state.step == "videos":
     st.markdown(
         f"🛠️ **How Inuit {st.session_state.category} ({st.session_state.style}) Are Made**"
@@ -109,6 +129,8 @@ elif st.session_state.step == "videos":
 
     for video in VIDEOS[(st.session_state.category, st.session_state.style)]:
         st.video(video)
+
+    st.markdown(f"📏 **Selected Shoe Size:** {st.session_state.size}")
 
     st.markdown("### What would you like to do next?")
 
@@ -124,7 +146,7 @@ elif st.session_state.step == "videos":
             st.session_state.step = "category"
             st.rerun()
 
-# ---------------- STEP 4: ORDER ----------------
+# ---------------- STEP 5: ORDER ----------------
 elif st.session_state.step == "order":
     choice = st.radio(
         "Would you like to place an order for home delivery?",
@@ -136,11 +158,14 @@ elif st.session_state.step == "order":
         st.session_state.step = "end"
         st.rerun()
 
-# ---------------- STEP 5: END ----------------
+# ---------------- STEP 6: END ----------------
 elif st.session_state.step == "end":
     if st.session_state.delivery == "Yes":
         st.success(
             "🎉 **Order Request Received!**\n\n"
+            f"Category: {st.session_state.category}\n\n"
+            f"Style: {st.session_state.style}\n\n"
+            f"Shoe Size: {st.session_state.size}\n\n"
             "Our team will contact you shortly to confirm delivery details.\n"
             "Thank you for choosing Inuit."
         )
